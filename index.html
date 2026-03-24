@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Anu 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      overflow: hidden;
+      color: white;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      margin-top: 15vh;
+    }
+
+    /* 🎉 Animated Heading */
+    h1 {
+      font-size: 3rem;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff; }
+      to { text-shadow: 0 0 25px #ff4d6d; }
+    }
+
+    .message {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .emojis {
+      font-size: 1.8rem;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background: white;
+      color: #ff4d6d;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ffe0e9;
+    }
+
+    #hiddenMsg {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.1rem;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .message { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+  <h1>🎉 Happy Birthday Anu 💖 🎂</h1>
+
+  <div class="emojis">🐻💖🐻 💕🥹✨ ❤️‍🔥</div>
+
+  <p class="message">
+    My Love 💖<br><br>
+    You make me feel so special every single day 🥹✨<br>
+    So today is my turn to make you feel the same 💕<br><br>
+    I Love You ❤️
+  </p>
+
+  <button onclick="showMessage()">Click for Secret 💌</button>
+
+  <p id="hiddenMsg">
+    You are my happiness, my safe place, my everything 💖<br>
+    I am so lucky to have you in my life 🥹💕<br>
+    Forever yours 🐻💖🐻
+  </p>
+
+  <button onclick="playMusic()">Play Music 🎵</button>
+  <button onclick="startConfetti()">Celebrate 🎊</button>
+</div>
+
+<!-- 🎵 Music -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function showMessage() {
+  document.getElementById("hiddenMsg").style.display = "block";
+}
+
+function playMusic() {
+  document.getElementById("bgMusic").play();
+}
+
+/* 🎊 Confetti */
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+
+function randomColor() {
+  const colors = ['#ff0','#0ff','#f0f','#0f0','#f00','#00f'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function createConfetti() {
+  for (let i = 0; i < 200; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 2,
+      d: Math.random() * 50,
+      color: randomColor()
+    });
+  }
+}
+
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  confetti.forEach((c) => {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  confetti.forEach((c) => {
+    c.y += Math.cos(c.d) + 2;
+    c.x += Math.sin(c.d);
+
+    if (c.y > canvas.height) {
+      c.y = -10;
+      c.x = Math.random() * canvas.width;
+    }
+  });
+}
+
+function startConfetti() {
+  confetti = [];
+  createConfetti();
+  setInterval(drawConfetti, 20);
+}
+
+/* 🎂 Floating Cake Emojis */
+setInterval(() => {
+  let emoji = document.createElement("div");
+  emoji.innerHTML = "🎂";
+  emoji.style.position = "fixed";
+  emoji.style.left = Math.random() * window.innerWidth + "px";
+  emoji.style.top = "-50px";
+  emoji.style.fontSize = "25px";
+  emoji.style.zIndex = "1";
+  document.body.appendChild(emoji);
+
+  let fall = setInterval(() => {
+    emoji.style.top = (emoji.offsetTop + 5) + "px";
+    if (emoji.offsetTop > window.innerHeight) {
+      emoji.remove();
+      clearInterval(fall);
+    }
+  }, 30);
+}, 500);
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
